@@ -1,6 +1,5 @@
 <?php
 
-// Chargement des dépendances dans l'ordre d'héritage
 require_once __DIR__ . '/src/Contract/Renderable.php';
 require_once __DIR__ . '/src/Exception/ChessException.php';
 require_once __DIR__ . '/src/Exception/InvalidMoveException.php';
@@ -22,61 +21,61 @@ require_once __DIR__ . '/src/Piece/Pawn.php';
 require_once __DIR__ . '/src/Factory/PieceFactory.php';
 require_once __DIR__ . '/src/Game.php';
 
+function parseAlgebraic(string $square): Position
+{
+    $square = strtolower(trim($square));
+    if (!preg_match('/^[a-h][1-8]$/', $square)) {
+        throw new InvalidArgumentException("Case invalide : \"$square\" (attendu ex: e2)");
+    }
+    $col = ord($square[0]) - ord('a');
+    $row = 8 - (int) $square[1];
+    return new Position($row, $col);
+}
+
 $game = new Game();
 $game->start();
 
-echo "=== Plateau initial ===";
-echo $game->getBoard()->render();
+echo "=== Jeu d'échecs interactif ===\n";
+echo "Entrez un coup au format algébrique : case de départ puis case d'arrivée (ex: e2 e4).\n";
+echo "Tapez 'quit' pour quitter.\n";
 
-$moves = [
-    ['from' => '6:4', 'to' => '4:4', 'desc' => 'e2-e4 (pion blanc)'],
-    ['from' => '1:4', 'to' => '3:4', 'desc' => 'e7-e5 (pion noir)'],
-    ['from' => '7:6', 'to' => '5:5', 'desc' => 'g1-f3 (cavalier blanc)'],
-    ['from' => '0:1', 'to' => '2:2', 'desc' => 'b8-c6 (cavalier noir)'],
-    ['from' => '7:5', 'to' => '4:2', 'desc' => 'f1-c4 (fou blanc)'],
-];
+while (true) {
+    echo $game->getBoard()->render();
 
-foreach ($moves as $m) {
-    try {
-        $from = Position::fromKey($m['from']);
-        $to   = Position::fromKey($m['to']);
-        $game->play(new Move($from, $to));
-        echo "✓ {$m['desc']}\n";
-    } catch (ChessException $e) {
-        echo "✗ {$m['desc']} → " . $e->getMessage() . "\n";
+    $player = $game->getCurrentPlayer();
+    $label  = $player === PieceColor::WHITE ? 'Blancs' : 'Noirs';
+
+    if ($game->isCheck($player)) {
+        echo "*** ÉCHEC au roi des $label ! ***\n";
     }
-}
 
-echo "\n=== Plateau après les coups ===";
-echo $game->getBoard()->render();
+    echo "$label > ";
+    $line = trim(fgets(STDIN));
 
-// Démonstration des exceptions
-echo "=== Tests d'erreurs ===\n";
+    if ($line === 'quit' || $line === 'exit') {
+        echo "Partie terminée.\n";
+        break;
+    }
 
-// Après 5 coups (B B B B B), c'est le tour des noirs
-$errorCases = [
-    ['from' => '5:5', 'to' => '3:4', 'desc' => 'Jouer un blanc quand c\'est le tour des noirs → WrongTurnException'],
-    ['from' => '2:5', 'to' => '3:5', 'desc' => 'Case vide → NoPieceException'],
-    ['from' => '3:4', 'to' => '5:4', 'desc' => 'Pion noir en sens inverse → InvalidMoveException'],
-    ['from' => '2:2', 'to' => '1:0', 'desc' => 'Cavalier noir sur pion allié → OccupiedByAllyException'],
-];
+    $parts = preg_split('/[\s\-]+/', $line);
+    if (count($parts) !== 2) {
+        echo "Format invalide. Exemple : e2 e4\n";
+        continue;
+    }
 
-foreach ($errorCases as $m) {
     try {
-        $from = Position::fromKey($m['from']);
-        $to   = Position::fromKey($m['to']);
+        $from = parseAlgebraic($parts[0]);
+        $to   = parseAlgebraic($parts[1]);
         $game->play(new Move($from, $to));
-        echo "  (aucune erreur)\n";
     } catch (NoPieceException $e) {
-        echo "  NoPieceException : " . $e->getMessage() . "\n";
+        echo "Erreur : " . $e->getMessage() . "\n";
     } catch (WrongTurnException $e) {
-        echo "  WrongTurnException : " . $e->getMessage() . "\n";
+        echo "Erreur : " . $e->getMessage() . "\n";
     } catch (InvalidMoveException $e) {
-        echo "  InvalidMoveException : " . $e->getMessage() . "\n";
+        echo "Coup invalide : " . $e->getMessage() . "\n";
     } catch (OccupiedByAllyException $e) {
-        echo "  OccupiedByAllyException : " . $e->getMessage() . "\n";
+        echo "Erreur : " . $e->getMessage() . "\n";
+    } catch (InvalidArgumentException $e) {
+        echo "Erreur de saisie : " . $e->getMessage() . "\n";
     }
 }
-
-echo "\nBlancs en échec : " . ($game->isCheck(PieceColor::WHITE) ? 'oui' : 'non') . "\n";
-echo "Noirs en échec  : " . ($game->isCheck(PieceColor::BLACK) ? 'oui' : 'non') . "\n";
