@@ -843,3 +843,90 @@ Une fois le sujet principal terminé, vous pouvez ajouter :
 - des tests automatisés.
 
 Mais ces bonus ne doivent pas casser l'architecture imposée ci-dessus.
+
+---
+
+## Réalisation
+
+| Élément | Fait |
+|---|:---:|
+| `Position` | ✓ |
+| `PieceColor` | ✓ |
+| `PieceType` | ✓ |
+| `Renderable` | ✓ |
+| `Piece` (abstraite) | ✓ |
+| `King` | ✓ |
+| `Queen` | ✓ |
+| `Rook` | ✓ |
+| `Bishop` | ✓ |
+| `Knight` | ✓ |
+| `Pawn` | ✓ |
+| `Move` | ✓ |
+| `Board` | ✓ |
+| `ChessException` | ✓ |
+| `InvalidMoveException` | ✓ |
+| `NoPieceException` | ✓ |
+| `WrongTurnException` | ✓ |
+| `OccupiedByAllyException` | ✓ |
+| `PieceFactory` | ✓ |
+| `Game` | ✓ |
+| `isCheck()` | ✓ |
+| Pattern Factory | ✓ |
+| Pattern Strategy | ✓ |
+| Pattern Template Method | ✓ |
+| Pattern Value Object | ✓ |
+
+---
+
+## Lancer le jeu
+
+### Démarrer une partie interactive
+
+```bash
+php index.php
+```
+
+Le programme affiche le plateau et invite chaque joueur à saisir son coup.
+
+### Format des coups
+
+Les coups s'écrivent en notation algébrique standard : case de départ, espace, case d'arrivée.
+
+```
+Blancs > e2 e4
+```
+
+Le séparateur peut être un espace ou un tiret (`e2-e4` fonctionne aussi).
+
+### Exemple de partie
+
+```
+Blancs > e2 e4
+Noirs  > e7 e5
+Blancs > g1 f3
+Noirs  > b8 c6
+Blancs > f1 c4
+```
+
+### Commandes spéciales
+
+| Saisie | Effet |
+|---|---|
+| `quit` ou `exit` | Quitte la partie |
+
+### Gestion des erreurs
+
+Les erreurs sont affichées sans interrompre la partie :
+
+```
+Coup invalide : déplacement invalide pour cette pièce
+Erreur : ce n'est pas le tour des noirs
+Erreur : aucune pièce en e3
+```
+
+Si le roi est en échec, un avertissement s'affiche avant la saisie :
+
+```
+*** ÉCHEC au roi des Blancs ! ***
+Blancs >
+```
