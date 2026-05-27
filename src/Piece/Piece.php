@@ -55,9 +55,6 @@ abstract class Piece implements Renderable
         if (!$this->isValidMovementShape($target)) {
             return false;
         }
-        if (!$this->canCapture($board, $target)) {
-            return false;
-        }
         if (!$this->canJump() && !$board->isPathClear($this->position, $target)) {
             return false;
         }
