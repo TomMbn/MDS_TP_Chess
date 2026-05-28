@@ -68,16 +68,34 @@ class Board implements Renderable
 
     public function render(): string
     {
-        $output = "\n  a b c d e f g h\n";
+        $light = "\033[48;5;222m"; // case claire (beige doré)
+        $dark  = "\033[48;5;130m"; // case sombre (brun)
+        $wFg   = "\033[1;97m";     // pièce blanche : blanc gras
+        $bFg   = "\033[1;30m";     // pièce noire   : noir gras
+        $reset = "\033[0m";
+        $dim   = "\033[2;37m";     // labels discrets
+
+        $header  = "{$dim}     a  b  c  d  e  f  g  h{$reset}";
+        $output  = "\n{$header}\n";
+
         for ($row = 0; $row < 8; $row++) {
-            $output .= (8 - $row) . ' ';
+            $rank    = 8 - $row;
+            $output .= "{$dim} {$rank}  {$reset}";
             for ($col = 0; $col < 8; $col++) {
-                $piece   = $this->getPieceAt(new Position($row, $col));
-                $output .= ($piece !== null ? $piece->render() : '.') . ' ';
+                $bg    = (($row + $col) % 2 === 0) ? $light : $dark;
+                $piece = $this->getPieceAt(new Position($row, $col));
+                if ($piece !== null) {
+                    $fg     = $piece->getColor() === PieceColor::WHITE ? $wFg : $bFg;
+                    $sym    = $piece->render();
+                    $output .= "{$bg}{$fg} {$sym} {$reset}";
+                } else {
+                    $output .= "{$bg}   {$reset}";
+                }
             }
-            $output .= (8 - $row) . "\n";
+            $output .= "  {$dim}{$rank}{$reset}\n";
         }
-        $output .= "  a b c d e f g h\n";
+
+        $output .= "{$header}\n";
         return $output;
     }
 

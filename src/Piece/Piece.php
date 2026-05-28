@@ -7,12 +7,12 @@ abstract class Piece implements Renderable
     protected PieceType $type;
 
     private const SYMBOLS = [
-        'KING'   => ['K', 'k'],
-        'QUEEN'  => ['Q', 'q'],
-        'ROOK'   => ['R', 'r'],
-        'BISHOP' => ['B', 'b'],
-        'KNIGHT' => ['N', 'n'],
-        'PAWN'   => ['P', 'p'],
+        'KING'   => ['♔', '♚'],
+        'QUEEN'  => ['♕', '♛'],
+        'ROOK'   => ['♖', '♜'],
+        'BISHOP' => ['♗', '♝'],
+        'KNIGHT' => ['♘', '♞'],
+        'PAWN'   => ['♙', '♟'],
     ];
 
     public function __construct(PieceColor $color, Position $position)
