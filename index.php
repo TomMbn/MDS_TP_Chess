@@ -36,7 +36,7 @@ $game = new Game();
 $game->start();
 
 echo "=== Jeu d'échecs interactif ===\n";
-echo "Entrez un coup au format algébrique : case de départ puis case d'arrivée (ex: e2 e4).\n";
+echo "Entrez un coup : case de départ puis case d'arrivée (ex: e2 e4).\n";
 echo "Tapez 'quit' pour quitter.\n";
 
 while (true) {

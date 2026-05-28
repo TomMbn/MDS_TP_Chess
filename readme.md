@@ -990,7 +990,7 @@ Mais ces bonus ne doivent pas casser l'architecture imposée ci-dessus.
 - ❌ Pat
 - ❌ Historique complet des coups
 - ❌ Tests automatisés
-- ✅ Autre bonus : jeu interactif en notation algébrique, rendu visuel ANSI avec symboles Unicode
+- ✅ Autre bonus : jeu interactif, rendu visuel ANSI avec symboles Unicode
 
 ---
 
@@ -1006,7 +1006,7 @@ Le programme affiche le plateau et invite chaque joueur à saisir son coup.
 
 ### Format des coups
 
-Les coups s'écrivent en notation algébrique standard : case de départ, espace, case d'arrivée.
+Les coups s'écrivent en notation longue : case de départ, espace, case d'arrivée.
 
 ```
 Blancs > e2 e4
