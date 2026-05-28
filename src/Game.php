@@ -41,12 +41,11 @@ class Game
         }
 
         if (!$piece->canMove($this->board, $move->getTo())) {
+            $targetPiece = $this->board->getPieceAt($move->getTo());
+            if ($targetPiece !== null && $targetPiece->getColor() === $this->currentPlayer) {
+                throw new OccupiedByAllyException("La case " . $move->getTo()->toKey() . " est occupée par un allié");
+            }
             throw new InvalidMoveException("Déplacement invalide : " . $move->getFrom()->toKey() . " → " . $move->getTo()->toKey());
-        }
-
-        $targetPiece = $this->board->getPieceAt($move->getTo());
-        if ($targetPiece !== null && $targetPiece->getColor() === $this->currentPlayer) {
-            throw new OccupiedByAllyException("La case " . $move->getTo()->toKey() . " est occupée par un allié");
         }
 
         $this->board->movePiece($move->getFrom(), $move->getTo());
