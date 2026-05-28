@@ -989,7 +989,7 @@ Mais ces bonus ne doivent pas casser l'architecture imposée ci-dessus.
 - ❌ Échec et mat
 - ❌ Pat
 - ❌ Historique complet des coups
-- ✅ Tests automatisés
+- ❌ Tests automatisés
 - ✅ Autre bonus : jeu interactif en notation algébrique, rendu visuel ANSI avec symboles Unicode
 
 ---
