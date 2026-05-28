@@ -848,33 +848,33 @@ Mais ces bonus ne doivent pas casser l'architecture imposée ci-dessus.
 
 ## Réalisation
 
-| Élément | Fait |
-|---|:---:|
-| `Position` | ✓ |
-| `PieceColor` | ✓ |
-| `PieceType` | ✓ |
-| `Renderable` | ✓ |
-| `Piece` (abstraite) | ✓ |
-| `King` | ✓ |
-| `Queen` | ✓ |
-| `Rook` | ✓ |
-| `Bishop` | ✓ |
-| `Knight` | ✓ |
-| `Pawn` | ✓ |
-| `Move` | ✓ |
-| `Board` | ✓ |
-| `ChessException` | ✓ |
-| `InvalidMoveException` | ✓ |
-| `NoPieceException` | ✓ |
-| `WrongTurnException` | ✓ |
-| `OccupiedByAllyException` | ✓ |
-| `PieceFactory` | ✓ |
-| `Game` | ✓ |
-| `isCheck()` | ✓ |
-| Pattern Factory | ✓ |
-| Pattern Strategy | ✓ |
-| Pattern Template Method | ✓ |
-| Pattern Value Object | ✓ |
+| Élément | Fichier | Fait |
+|---|---|:---:|
+| `Position` | [src/Position.php](src/Position.php) | ✓ |
+| `PieceColor` | [src/Enum/PieceColor.php](src/Enum/PieceColor.php) | ✓ |
+| `PieceType` | [src/Enum/PieceType.php](src/Enum/PieceType.php) | ✓ |
+| `Renderable` | [src/Contract/Renderable.php](src/Contract/Renderable.php) | ✓ |
+| `Piece` (abstraite) | [src/Piece/Piece.php](src/Piece/Piece.php) | ✓ |
+| `King` | [src/Piece/King.php](src/Piece/King.php) | ✓ |
+| `Queen` | [src/Piece/Queen.php](src/Piece/Queen.php) | ✓ |
+| `Rook` | [src/Piece/Rook.php](src/Piece/Rook.php) | ✓ |
+| `Bishop` | [src/Piece/Bishop.php](src/Piece/Bishop.php) | ✓ |
+| `Knight` | [src/Piece/Knight.php](src/Piece/Knight.php) | ✓ |
+| `Pawn` | [src/Piece/Pawn.php](src/Piece/Pawn.php) | ✓ |
+| `Move` | [src/Move.php](src/Move.php) | ✓ |
+| `Board` | [src/Board.php](src/Board.php) | ✓ |
+| `ChessException` | [src/Exception/ChessException.php](src/Exception/ChessException.php) | ✓ |
+| `InvalidMoveException` | [src/Exception/InvalidMoveException.php](src/Exception/InvalidMoveException.php) | ✓ |
+| `NoPieceException` | [src/Exception/NoPieceException.php](src/Exception/NoPieceException.php) | ✓ |
+| `WrongTurnException` | [src/Exception/WrongTurnException.php](src/Exception/WrongTurnException.php) | ✓ |
+| `OccupiedByAllyException` | [src/Exception/OccupiedByAllyException.php](src/Exception/OccupiedByAllyException.php) | ✓ |
+| `PieceFactory` | [src/Factory/PieceFactory.php](src/Factory/PieceFactory.php) | ✓ |
+| `Game` | [src/Game.php](src/Game.php) | ✓ |
+| `isCheck()` | [src/Game.php](src/Game.php) | ✓ |
+| Pattern Factory | [src/Factory/PieceFactory.php](src/Factory/PieceFactory.php) | ✓ |
+| Pattern Strategy | [src/Piece/Piece.php](src/Piece/Piece.php) | ✓ |
+| Pattern Template Method | [src/Piece/Piece.php](src/Piece/Piece.php) | ✓ |
+| Pattern Value Object | [src/Position.php](src/Position.php) | ✓ |
 
 ---
 
