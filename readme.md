@@ -268,7 +268,9 @@ public function __construct(int $row, int $column)
 public function getRow(): int
 public function getColumn(): int
 public function equals(Position $other): bool
+// Transforme une position en chaine de caractère (exemple : Position(6, 4) -> "6:4" (row:column) )
 public function toKey(): string
+<!-- Fait la transformation inverse (exemple : "6:4" -> Position(6, 4) ) -->
 public static function fromKey(string $key): Position
 ```
 
@@ -319,6 +321,13 @@ Exemple attendu :
 
 - si la couleur courante est `PieceColor::WHITE`, la méthode retourne `PieceColor::BLACK`
 - si la couleur courante est `PieceColor::BLACK`, la méthode retourne `PieceColor::WHITE`
+
+### Indications
+
+Dans une méthode d'enum en PHP :
+
+- `$this` désigne le cas courant de l'enum ;
+- `self::WHITE` et `self::BLACK` désignent les cas possibles de cet enum.
 
 ### Exemple d'utilisation
 
@@ -395,6 +404,31 @@ abstract protected function isValidMovementShape(Position $target): bool
 protected function canCapture(Board $board, Position $target): bool
 ```
 
+### Rôle de `render()`
+
+La méthode `render()` doit retourner une représentation texte de l'objet.
+
+### Attendu pour `Piece::render()`
+
+La méthode doit retourner une chaîne courte représentant la pièce, utilisable dans l'affichage du plateau.
+
+Convention imposée :
+
+- roi blanc : `"K"`
+- reine blanche : `"Q"`
+- tour blanche : `"R"`
+- fou blanc : `"B"`
+- cavalier blanc : `"N"`
+- pion blanc : `"P"`
+- roi noir : `"k"`
+- reine noire : `"q"`
+- tour noire : `"r"`
+- fou noire : `"b"`
+- cavalier noir : `"n"`
+- pion noir : `"p"`
+
+La méthode `Board::render()` devra utiliser `Piece::render()` pour construire l'affichage texte du plateau.
+
 ### Règle de conception imposée
 
 Vous devez appliquer ici un Template Method :
@@ -411,7 +445,6 @@ Dans cet ordre :
 2. la forme du déplacement est valide ;
 3. la case cible n'est pas occupée par un allié ;
 4. si la pièce n'est pas un cavalier, le chemin est libre ;
-5. si c'est un pion, les règles spéciales du pion sont respectées.
 
 Vous ne devez pas changer cet ordre.
 
@@ -521,10 +554,12 @@ $this->pieces['6:4'] = $piece;
 ### Méthodes imposées
 
 ```php
+// Permet de placer la pièce AU DEBUT du jeu
 public function placePiece(Piece $piece): void
 public function getPieceAt(Position $position): ?Piece
 public function hasPieceAt(Position $position): bool
 public function removePieceAt(Position $position): void
+// permet de déplacer les pièces PENDANT le jeu
 public function movePiece(Position $from, Position $to): void
 public function isPathClear(Position $from, Position $to): bool
 public function getPieces(): array
@@ -844,38 +879,118 @@ Une fois le sujet principal terminé, vous pouvez ajouter :
 
 Mais ces bonus ne doivent pas casser l'architecture imposée ci-dessus.
 
----
 
-## Réalisation
+## État d'avancement
 
-| Élément | Fichier | Fait |
-|---|---|:---:|
-| `Position` | [src/Position.php](src/Position.php) | ✓ |
-| `PieceColor` | [src/Enum/PieceColor.php](src/Enum/PieceColor.php) | ✓ |
-| `PieceType` | [src/Enum/PieceType.php](src/Enum/PieceType.php) | ✓ |
-| `Renderable` | [src/Contract/Renderable.php](src/Contract/Renderable.php) | ✓ |
-| `Piece` (abstraite) | [src/Piece/Piece.php](src/Piece/Piece.php) | ✓ |
-| `King` | [src/Piece/King.php](src/Piece/King.php) | ✓ |
-| `Queen` | [src/Piece/Queen.php](src/Piece/Queen.php) | ✓ |
-| `Rook` | [src/Piece/Rook.php](src/Piece/Rook.php) | ✓ |
-| `Bishop` | [src/Piece/Bishop.php](src/Piece/Bishop.php) | ✓ |
-| `Knight` | [src/Piece/Knight.php](src/Piece/Knight.php) | ✓ |
-| `Pawn` | [src/Piece/Pawn.php](src/Piece/Pawn.php) | ✓ |
-| `Move` | [src/Move.php](src/Move.php) | ✓ |
-| `Board` | [src/Board.php](src/Board.php) | ✓ |
-| `ChessException` | [src/Exception/ChessException.php](src/Exception/ChessException.php) | ✓ |
-| `InvalidMoveException` | [src/Exception/InvalidMoveException.php](src/Exception/InvalidMoveException.php) | ✓ |
-| `NoPieceException` | [src/Exception/NoPieceException.php](src/Exception/NoPieceException.php) | ✓ |
-| `WrongTurnException` | [src/Exception/WrongTurnException.php](src/Exception/WrongTurnException.php) | ✓ |
-| `OccupiedByAllyException` | [src/Exception/OccupiedByAllyException.php](src/Exception/OccupiedByAllyException.php) | ✓ |
-| `PieceFactory` | [src/Factory/PieceFactory.php](src/Factory/PieceFactory.php) | ✓ |
-| `Game` | [src/Game.php](src/Game.php) | ✓ |
-| `isCheck()` | [src/Game.php](src/Game.php) | ✓ |
-| Pattern Factory | [src/Factory/PieceFactory.php](src/Factory/PieceFactory.php) | ✓ |
-| Pattern Strategy | [src/Piece/Piece.php](src/Piece/Piece.php) | ✓ |
-| Pattern Template Method | [src/Piece/Piece.php](src/Piece/Piece.php) | ✓ |
-| Pattern Value Object | [src/Position.php](src/Position.php) | ✓ |
-| Promotion | [src/Game.php](src/Game.php) | ✓ |
+## Classes principales
+
+- ✅ [`Position`](src/Position.php)
+  - ✅ `__construct()`
+  - ✅ `getRow()`
+  - ✅ `getColumn()`
+  - ✅ `equals()`
+  - ✅ `toKey()`
+  - ✅ `fromKey()`
+
+- ✅ [`Move`](src/Move.php)
+  - ✅ `__construct()`
+  - ✅ `getFrom()`
+  - ✅ `getTo()`
+
+- ✅ [`Board`](src/Board.php)
+  - ✅ `placePiece()`
+  - ✅ `getPieceAt()`
+  - ✅ `hasPieceAt()`
+  - ✅ `removePieceAt()`
+  - ✅ `movePiece()`
+  - ✅ `isPathClear()`
+  - ✅ `getPieces()`
+  - ✅ `getKingPosition()`
+  - ✅ `render()`
+
+- ✅ [`Game`](src/Game.php)
+  - ✅ `__construct()`
+  - ✅ `start()`
+  - ✅ `getBoard()`
+  - ✅ `getCurrentPlayer()`
+  - ✅ `play()`
+  - ✅ `isCheck()`
+  - ✅ `setupPieces()`
+  - ✅ `switchPlayer()`
+
+## Pièces
+
+- ✅ [`Piece`](src/Piece/Piece.php)
+  - ✅ `__construct()`
+  - ✅ `getColor()`
+  - ✅ `getPosition()`
+  - ✅ `setPosition()`
+  - ✅ `getType()`
+  - ✅ `render()`
+  - ✅ `canMove()`
+  - ✅ `isValidMovementShape()`
+  - ✅ `canCapture()`
+
+- ✅ [`King`](src/Piece/King.php)
+  - ✅ `isValidMovementShape()`
+
+- ✅ [`Queen`](src/Piece/Queen.php)
+  - ✅ `isValidMovementShape()`
+
+- ✅ [`Rook`](src/Piece/Rook.php)
+  - ✅ `isValidMovementShape()`
+
+- ✅ [`Bishop`](src/Piece/Bishop.php)
+  - ✅ `isValidMovementShape()`
+
+- ✅ [`Knight`](src/Piece/Knight.php)
+  - ✅ `isValidMovementShape()`
+
+- ✅ [`Pawn`](src/Piece/Pawn.php)
+  - ✅ `isValidMovementShape()`
+
+## Factory
+
+- ✅ [`PieceFactory`](src/Factory/PieceFactory.php)
+  - ✅ `create()`
+
+## Interface / Enums
+
+- ✅ [`Renderable`](src/Contract/Renderable.php)
+  - ✅ `render()`
+
+- ✅ [`PieceColor`](src/Enum/PieceColor.php)
+  - ✅ `WHITE`
+  - ✅ `BLACK`
+  - ✅ `opposite()`
+
+- ✅ [`PieceType`](src/Enum/PieceType.php)
+  - ✅ `KING`
+  - ✅ `QUEEN`
+  - ✅ `ROOK`
+  - ✅ `BISHOP`
+  - ✅ `KNIGHT`
+  - ✅ `PAWN`
+
+## Exceptions
+
+- ✅ [`ChessException`](src/Exception/ChessException.php)
+- ✅ [`InvalidMoveException`](src/Exception/InvalidMoveException.php)
+- ✅ [`NoPieceException`](src/Exception/NoPieceException.php)
+- ✅ [`WrongTurnException`](src/Exception/WrongTurnException.php)
+- ✅ [`OccupiedByAllyException`](src/Exception/OccupiedByAllyException.php)
+
+## Bonus
+
+- ❌ Roque
+- ✅ Promotion du pion
+- ❌ Prise en passant
+- ❌ Interdiction de mettre son propre roi en échec
+- ❌ Échec et mat
+- ❌ Pat
+- ❌ Historique complet des coups
+- ✅ Tests automatisés
+- ✅ Autre bonus : jeu interactif en notation algébrique, rendu visuel ANSI avec symboles Unicode
 
 ---
 

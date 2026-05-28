@@ -4,6 +4,11 @@ class Board implements Renderable
 {
     private array $pieces = [];
 
+    private const UNICODE = [
+        'K' => '♔', 'Q' => '♕', 'R' => '♖', 'B' => '♗', 'N' => '♘', 'P' => '♙',
+        'k' => '♚', 'q' => '♛', 'r' => '♜', 'b' => '♝', 'n' => '♞', 'p' => '♟',
+    ];
+
     public function placePiece(Piece $piece): void
     {
         $this->pieces[$piece->getPosition()->toKey()] = $piece;
@@ -86,7 +91,7 @@ class Board implements Renderable
                 $piece = $this->getPieceAt(new Position($row, $col));
                 if ($piece !== null) {
                     $fg     = $piece->getColor() === PieceColor::WHITE ? $wFg : $bFg;
-                    $sym    = $piece->render();
+                    $sym    = self::UNICODE[$piece->render()];
                     $output .= "{$bg}{$fg} {$sym} {$reset}";
                 } else {
                     $output .= "{$bg}   {$reset}";
