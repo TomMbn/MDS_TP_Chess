@@ -67,6 +67,15 @@ while (true) {
         $from = parseAlgebraic($parts[0]);
         $to   = parseAlgebraic($parts[1]);
         $game->play(new Move($from, $to));
+
+        if ($game->needsPromotion()) {
+            $promotionMap = ['Q' => PieceType::QUEEN, 'R' => PieceType::ROOK, 'B' => PieceType::BISHOP, 'N' => PieceType::KNIGHT];
+            do {
+                echo "Promotion ! Choisissez [Q=Reine, R=Tour, B=Fou, N=Cavalier] : ";
+                $choice = strtoupper(trim(fgets(STDIN)));
+            } while (!isset($promotionMap[$choice]));
+            $game->promote($promotionMap[$choice]);
+        }
     } catch (NoPieceException $e) {
         echo "Erreur : " . $e->getMessage() . "\n";
     } catch (WrongTurnException $e) {

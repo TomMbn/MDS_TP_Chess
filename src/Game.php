@@ -5,6 +5,7 @@ class Game
     private Board $board;
     private PieceColor $currentPlayer;
     private PieceFactory $pieceFactory;
+    private ?Position $pendingPromotion = null;
 
     public function __construct()
     {
@@ -30,6 +31,10 @@ class Game
 
     public function play(Move $move): void
     {
+        if ($this->pendingPromotion !== null) {
+            throw new InvalidMoveException("Une promotion est en attente. Appelez promote() d'abord.");
+        }
+
         $piece = $this->board->getPieceAt($move->getFrom());
 
         if ($piece === null) {
@@ -49,6 +54,34 @@ class Game
         }
 
         $this->board->movePiece($move->getFrom(), $move->getTo());
+
+        $movedPiece   = $this->board->getPieceAt($move->getTo());
+        $promotionRow = $movedPiece->getColor() === PieceColor::WHITE ? 0 : 7;
+        if ($movedPiece->getType() === PieceType::PAWN && $move->getTo()->getRow() === $promotionRow) {
+            $this->pendingPromotion = $move->getTo();
+        } else {
+            $this->switchPlayer();
+        }
+    }
+
+    public function needsPromotion(): bool
+    {
+        return $this->pendingPromotion !== null;
+    }
+
+    public function promote(PieceType $type): void
+    {
+        if ($this->pendingPromotion === null) {
+            return;
+        }
+
+        $pawn     = $this->board->getPieceAt($this->pendingPromotion);
+        $newPiece = $this->pieceFactory->create($type, $pawn->getColor(), $this->pendingPromotion);
+
+        $this->board->removePieceAt($this->pendingPromotion);
+        $this->board->placePiece($newPiece);
+
+        $this->pendingPromotion = null;
         $this->switchPlayer();
     }
 

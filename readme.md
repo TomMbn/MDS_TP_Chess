@@ -875,6 +875,7 @@ Mais ces bonus ne doivent pas casser l'architecture imposée ci-dessus.
 | Pattern Strategy | [src/Piece/Piece.php](src/Piece/Piece.php) | ✓ |
 | Pattern Template Method | [src/Piece/Piece.php](src/Piece/Piece.php) | ✓ |
 | Pattern Value Object | [src/Position.php](src/Position.php) | ✓ |
+| Promotion | [src/Game.php](src/Game.php) | ✓ |
 
 ---
 
